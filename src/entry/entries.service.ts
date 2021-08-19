@@ -4,6 +4,12 @@ import { Model } from "mongoose";
 
 import { Entry } from "./entries.model"
 
+class UpdatedEntry {
+  value: number;
+  description: string;
+  date: Date;
+}
+
 @Injectable()
 export class EntriesService {
   private entries: Entry[] = [];
@@ -32,19 +38,8 @@ export class EntriesService {
     return this.serializeEntry(entry)
   }
 
-  async updateEntry(id: string, value: number, description: string, date: string) {
-    const updatedEntry = await this.findEntry(id);
-    if (value) {
-      updatedEntry.value = value;
-    }
-    if (description) {
-      updatedEntry.description = description;
-    }
-    if (date) {
-      updatedEntry.date = new Date(date);
-    }
-    updatedEntry.save();
-    return this.serializeEntry(updatedEntry);
+  async updateEntry(id: string, entryDTO: UpdatedEntry) {
+    return await this.entryModel.findOneAndUpdate({ _id: id }, entryDTO, { new: true }).exec();
   }
 
   async deleteEntry(id: string) {

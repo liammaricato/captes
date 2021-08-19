@@ -1,6 +1,20 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Transform } from "class-transformer";
+import { IsDateString, IsNumber, IsString, Min } from "class-validator";
 
 import { EntriesService } from "./entries.service";
+
+class UpdatedEntry {
+  @IsNumber()
+  @Min(0)
+  value: number;
+
+  @IsString()
+  description: string;
+
+  @IsDateString()
+  date: Date;
+}
 
 @Controller('entries')
 export class EntriesController {
@@ -12,8 +26,7 @@ export class EntriesController {
     @Body('description') entryDescription: string,
     @Body('date') entryDate: string
   ) {
-    const result = await this.entriesService.insertEntry(entryValue, entryDescription, entryDate);
-    return result;
+    return await this.entriesService.insertEntry(entryValue, entryDescription, entryDate);
   }
 
   @Get()
@@ -29,11 +42,9 @@ export class EntriesController {
   @Patch(':id')
   async updateEntry(
     @Param('id') entryId: string,
-    @Body('value') entryValue: number,
-    @Body('description') entryDescription: string,
-    @Body('date') entryDate: string
+    @Body() updatedEntry: UpdatedEntry
   ) {
-    return await this.entriesService.updateEntry(entryId, entryValue, entryDescription, entryDate);
+    return await this.entriesService.updateEntry(entryId, updatedEntry);
   }
 
   @Delete(':id')
