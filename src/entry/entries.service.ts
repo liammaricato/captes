@@ -12,8 +12,6 @@ class UpdatedEntry {
 
 @Injectable()
 export class EntriesService {
-  private entries: Entry[] = [];
-
   constructor(
     @InjectModel('Entry') private readonly entryModel: Model<Entry>
   ) {}
@@ -24,18 +22,15 @@ export class EntriesService {
       description,
       date: new Date(date)
     });
-    const entry = await newEntry.save();
-    return this.serializeEntry(entry);
+    return await newEntry.save();
   }
 
   async getEntries() {
-    const entries = await this.entryModel.find().exec();
-    return entries.map(entry => (this.serializeEntry(entry)));
+    return await this.entryModel.find().exec();
   }
 
   async getEntry(id: string) {
-    const entry = await this.findEntry(id);
-    return this.serializeEntry(entry)
+    return await this.findEntry(id);
   }
 
   async updateEntry(id: string, entryDTO: UpdatedEntry) {
@@ -62,16 +57,5 @@ export class EntriesService {
       throw new NotFoundException('Could not find entry.');
     }
     return entry
-  }
-
-  private serializeEntry(entry: Entry) {
-    return {
-      id: entry.id,
-      value: entry.value,
-      description: entry.description,
-      date: entry.date,
-      createdAt: entry.createdAt,
-      updatedAt: entry.updatedAt
-    }
   }
 }
