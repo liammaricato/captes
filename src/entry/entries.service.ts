@@ -47,12 +47,7 @@ export class EntriesService {
   }
 
   private async findEntry(id: string): Promise<Entry> {
-    let entry;
-    try {
-      entry = await this.entryModel.findById(id).exec();
-    } catch (error) {
-      throw new NotFoundException('Could not find entry.');
-    }
+    const entry = await this.entryModel.findById(id).exec();
     if (!entry) {
       throw new NotFoundException('Could not find entry.');
     }
