@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
       'mongodb+srv://admin:admin@captes.bg8zh.mongodb.net/captes-dev?retryWrites=true&w=majority'
     ),
     UsersModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
