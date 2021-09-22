@@ -34,6 +34,11 @@ export class EntriesController {
     return await this.entriesService.getEntries();
   }
 
+  @Get('/last/:quantity/:offset')
+  async getLastEntriesFromOffset(@Param('quantity') quantity: number, @Param('offset') offset: number) {
+    return await this.entriesService.getLastEntriesFromOffset(quantity, offset);
+  }
+
   @Get(':id')
   async getEntry(@Param('id') entryId: string) {
     return await this.entriesService.getEntry(entryId);

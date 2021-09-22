@@ -33,6 +33,10 @@ export class EntriesService {
     return await this.findEntry(id);
   }
 
+  async getLastEntriesFromOffset(quantity: number, offset: number) {
+    return await this.entryModel.find({}).sort({ date: -1 }).skip(offset).limit(quantity);
+  }
+
   async updateEntry(id: string, entryDTO: UpdatedEntry) {
     return await this.entryModel.findOneAndUpdate({ _id: id }, entryDTO, { new: true }).exec();
   }
